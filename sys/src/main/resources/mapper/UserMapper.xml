@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enterprise.demo.sys.dao.UserMapper">
+
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="com.enterprise.demo.sys.entity.User">
+    <id column="id" property="id"/>
+    <result column="user_id" property="userId"/>
+    <result column="username" property="username"/>
+    <result column="password" property="password"/>
+    <result column="salt" property="salt"/>
+    <result column="email" property="email"/>
+    <result column="phone" property="phone"/>
+    <result column="sex" property="sex"/>
+    <result column="age" property="age"/>
+    <result column="status" property="status"/>
+    <result column="last_login_time" property="lastLoginTime"/>
+    <result column="gmt_create" property="gmtCreate"/>
+    <result column="gmt_modified" property="gmtModified"/>
+  </resultMap>
+
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
+        id, user_id AS userId, username, password, salt, email, phone, sex, age, status,
+        last_login_time AS lastLoginTime, gmt_create AS gmtCreate, gmt_modified AS gmtModified
+    </sql>
+
+  <update id="updateLastLoginTime" parameterType="User">
+        UPDATE user SET last_login_time = now() WHERE id = #{id}
+    </update>
+
+  <update id="updateStatusBatch">
+    UPDATE
+    user
+    SET
+    status=#{status}
+    where
+    user_id in
+    <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+
+</mapper>

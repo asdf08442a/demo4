@@ -1,0 +1,56 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: demo
+  profiles:
+    active: dev
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: HikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+logging:
+  config: classpath:log4j2.xml
+
+---
+#dev
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://172.16.107.128:3306/model1?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+logging:
+  level.com.enterprise: debug
+
+---
+#test
+spring:
+  profiles: test
+  datasource:
+    url:
+    username:
+    password:
+logging:
+  level.com.enterprise: info
+
+---
+#prod
+spring:
+  profiles: prod
+  datasource:
+    url:
+    username:
+    password:
+logging:
+  level.com.enterprise: info
+
+

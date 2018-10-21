@@ -1,0 +1,14 @@
+${AnsiColor.BRIGHT_BLUE}  /$$$$$$                        /$$
+${AnsiColor.BRIGHT_BLUE} /$$__  $$                      | $$
+${AnsiColor.BRIGHT_BLUE}| $$  \__/ /$$   /$$  /$$$$$$$ /$$$$$$    /$$$$$$  /$$$$$$/$$$$
+${AnsiColor.BRIGHT_BLUE}|  $$$$$$ | $$  | $$ /$$_____/|_  $$_/   /$$__  $$| $$_  $$_  $$
+${AnsiColor.BRIGHT_BLUE} \____  $$| $$  | $$|  $$$$$$   | $$    | $$$$$$$$| $$ \ $$ \ $$
+${AnsiColor.BRIGHT_BLUE} /$$  \ $$| $$  | $$ \____  $$  | $$ /$$| $$_____/| $$ | $$ | $$
+${AnsiColor.BRIGHT_BLUE}|  $$$$$$/|  $$$$$$$ /$$$$$$$/  |  $$$$/|  $$$$$$$| $$ | $$ | $$
+${AnsiColor.BRIGHT_BLUE} \______/  \____  $$|_______/    \___/   \_______/|__/ |__/ |__/
+${AnsiColor.BRIGHT_BLUE}           /$$  | $$
+${AnsiColor.BRIGHT_BLUE}          |  $$$$$$/
+ ${AnsiColor.BRIGHT_BLUE}          \______/
+
+${AnsiColor.BRIGHT_BLUE}Project: ${spring.application.name}
+${AnsiColor.BRIGHT_BLUE}Spring Boot Version:${spring-boot.formatted-version}

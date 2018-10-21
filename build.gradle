@@ -1,0 +1,74 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.16.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+group 'com.enterprise.demo'
+version '1.0.0-SNAPSHOT'
+
+allprojects{
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'maven'
+    apply plugin: 'org.springframework.boot'
+
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+
+    repositories {
+        mavenLocal()
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+    }
+
+    idea {
+        module {
+            downloadSources = true
+            downloadJavadoc = false
+        }
+    }
+
+    // add source dir, for mbgen
+    sourceSets {
+        main {
+            java {
+                srcDir 'src/main/java'
+                srcDir 'src/gen/java'
+            }
+            resources {
+                srcDir 'src/main/resources'
+                srcDir 'src/gen/resources'
+            }
+        }
+    }
+
+    clean {
+        delete "$projectDir.path/out"
+    }
+
+}
+
+subprojects {
+    configurations {
+        all*.exclude module: 'slf4j-log4j12'
+    }
+
+    dependencies {
+        compile group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+        compile("org.springframework.boot:spring-boot-starter-web")
+        compile("org.springframework.boot:spring-boot-starter-aop")
+        compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
+
+        testCompile("org.springframework.boot:spring-boot-starter-test")
+    }
+}
