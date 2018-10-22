@@ -22,7 +22,8 @@ public class MybatisPlusConfig {
   @Bean
   public PaginationInterceptor paginationInterceptor() {
     PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
-    paginationInterceptor.setLocalPage(true);// 开启pageHelper支持
+    // 开启pageHelper支持
+    paginationInterceptor.setLocalPage(true);
     return paginationInterceptor;
   }
 
@@ -33,8 +34,10 @@ public class MybatisPlusConfig {
   @Profile({"dev", "test"})
   public PerformanceInterceptor performanceInterceptor() {
     PerformanceInterceptor performanceInterceptor = new PerformanceInterceptor();
-    performanceInterceptor.setFormat(true);// sql格式化
-    performanceInterceptor.setMaxTime(1000);// sql最大执行时间
+    // sql格式化
+    performanceInterceptor.setFormat(true);
+    // sql最大执行时间
+    performanceInterceptor.setMaxTime(1000);
     return performanceInterceptor;
   }
 }
