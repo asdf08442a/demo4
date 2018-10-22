@@ -1,11 +1,13 @@
 package com.enterprise.demo.sys.controller;
 
+import com.enterprise.demo.sys.common.exception.BizException;
 import com.enterprise.demo.sys.common.util.ResultUtils;
 import com.enterprise.demo.sys.dto.base.ResponseDTO;
 import com.enterprise.demo.sys.entity.Permission;
 import com.enterprise.demo.sys.entity.User;
 import com.enterprise.demo.sys.service.PermissionService;
 import com.enterprise.demo.sys.service.UserService;
+import com.enterprise.demo.sys.shiro.filter.KickoutSessionControlFilter;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import java.awt.image.BufferedImage;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -178,13 +181,15 @@ public class SystemController {
   @ResponseBody
   public ResponseDTO logout() {
     Subject subject = SecurityUtils.getSubject();
-    if (subject != null) {
-      String username = ((User) SecurityUtils.getSubject().getPrincipal()).getUsername();
-      Serializable sessionId = SecurityUtils.getSubject().getSession().getId();
-      Cache<String, Deque<Serializable>> cache = redisCacheManager
-          .getCache(redisCacheManager.getKeyPrefix() +
-              username);
-      Deque<Serializable> deques = cache.get(username);
+    if (subject == null) {
+      throw new BizException("用户已登出");
+    }
+    String username = ((User) SecurityUtils.getSubject().getPrincipal()).getUsername();
+    Serializable sessionId = SecurityUtils.getSubject().getSession().getId();
+    Cache<String, Deque<Serializable>> cache = redisCacheManager.getCache(
+        KickoutSessionControlFilter.SHIRO_REDIS_KEY);
+    Deque<Serializable> deques = cache.get(username);
+    if (CollectionUtils.isNotEmpty(deques)) {
       for (Serializable deque : deques) {
         if (sessionId.equals(deque)) {
           deques.remove(deque);
@@ -192,8 +197,8 @@ public class SystemController {
         }
       }
       cache.put(username, deques);
-      subject.logout();
     }
+    subject.logout();
     return ResultUtils.success("退出成功");
   }
 }

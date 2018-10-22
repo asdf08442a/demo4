@@ -1,14 +1,12 @@
 package com.enterprise.demo.sys.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import com.enterprise.demo.sys.entity.Permission;
-import com.enterprise.demo.sys.service.PermissionService;
 import com.enterprise.demo.sys.shiro.MyShiroRealm;
+import com.enterprise.demo.sys.shiro.ShiroService;
 import com.enterprise.demo.sys.shiro.filter.KickoutSessionControlFilter;
 import com.google.common.collect.Maps;
-import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
+import javax.servlet.Filter;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
@@ -48,7 +46,7 @@ public class ShiroConfig {
   private int timeout;
 
   @Autowired
-  private PermissionService permissionService;
+  private ShiroService shiroService;
 
   /**
    * shiro管理生命周期
@@ -76,36 +74,14 @@ public class ShiroConfig {
     shiroFilterFactoryBean.setLoginUrl("/login");
     // 登录成功后要跳转的链接
     shiroFilterFactoryBean.setSuccessUrl("/index");
-    // 未授权界面;
+    // 未授权界面
     shiroFilterFactoryBean.setUnauthorizedUrl("/error/403");
+    // 限制同一帐号同时在线的个数
+    Map<String, Filter> filtersMap = Maps.newLinkedHashMap();
+    filtersMap.put("kickout", kickoutSessionControlFilter());
+    shiroFilterFactoryBean.setFilters(filtersMap);
     // 拦截器.
-    Map<String, String> filterChainDefinitionMap = Maps.newLinkedHashMap();
-
-    // authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问
-    filterChainDefinitionMap.put("/register", "anon");
-    filterChainDefinitionMap.put("/login", "anon");
-    filterChainDefinitionMap.put("/kickout", "anon");
-    filterChainDefinitionMap.put("/error/**", "anon");
-    // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
-//        filterChainDefinitionMap.put("/logout", "logout");
-    filterChainDefinitionMap.put("/css/**", "anon");
-    filterChainDefinitionMap.put("/js/**", "anon");
-    filterChainDefinitionMap.put("/img/**", "anon");
-    filterChainDefinitionMap.put("/libs/**", "anon");
-    filterChainDefinitionMap.put("/favicon.ico", "anon");
-    filterChainDefinitionMap.put("/verificationCode", "anon");
-    filterChainDefinitionMap.put("/consumer", "anon");// TODO: 2018/8/2 测试用
-    // 自定义加载权限资源关系
-    List<Permission> permissionList = permissionService.selectAll();
-    for (Permission permission : permissionList) {
-      if (StringUtils.isNotBlank(permission.getUrl()) && StringUtils
-          .isNotBlank(permission.getPerms())) {
-        String perms = "perms[" + permission.getPerms() + "]";
-        filterChainDefinitionMap.put(permission.getUrl(), perms);
-      }
-    }
-    filterChainDefinitionMap.put("/**", "user");
-
+    Map<String, String> filterChainDefinitionMap = shiroService.loadFilterChainDefinitions();
     shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     return shiroFilterFactoryBean;
   }

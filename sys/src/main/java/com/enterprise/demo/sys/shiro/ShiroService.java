@@ -1,11 +1,9 @@
 package com.enterprise.demo.sys.shiro;
 
-import com.enterprise.demo.sys.entity.Permission;
+import com.enterprise.demo.sys.common.util.SpringContextHolder;
 import com.enterprise.demo.sys.service.PermissionService;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
@@ -16,8 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ShiroService {
 
-  @Autowired
-  private ShiroFilterFactoryBean shiroFilterFactoryBean;
   @Autowired
   private PermissionService permissionService;
 
@@ -30,22 +26,22 @@ public class ShiroService {
     filterChainDefinitionMap.put("/register", "anon");
     filterChainDefinitionMap.put("/login", "anon");
     filterChainDefinitionMap.put("/error/**", "anon");
-    filterChainDefinitionMap.put("/logout", "logout");
+    filterChainDefinitionMap.put("/kickout", "anon");
     filterChainDefinitionMap.put("/css/**", "anon");
     filterChainDefinitionMap.put("/js/**", "anon");
     filterChainDefinitionMap.put("/img/**", "anon");
     filterChainDefinitionMap.put("/libs/**", "anon");
     filterChainDefinitionMap.put("/favicon.ico", "anon");
     filterChainDefinitionMap.put("/verificationCode", "anon");
-    List<Permission> permissionList = permissionService.selectAll();
-    for (Permission permission : permissionList) {
-      if (StringUtils.isNotBlank(permission.getUrl()) && StringUtils
-          .isNotBlank(permission.getPerms())) {
-        String perm = "perms[" + permission.getPerms() + "]";
-        filterChainDefinitionMap.put(permission.getUrl(), perm);
-      }
-    }
-    filterChainDefinitionMap.put("/**", "user");
+//    List<Permission> permissionList = permissionService.selectAll();
+//    for (Permission permission : permissionList) {
+//      if (StringUtils.isNotBlank(permission.getUrl()) && StringUtils
+//          .isNotBlank(permission.getPerms())) {
+//        String perm = "perms[" + permission.getPerms() + "]";
+//        filterChainDefinitionMap.put(permission.getUrl(), perm+",kickout");
+//      }
+//    }
+    filterChainDefinitionMap.put("/**", "authc,kickout");
     return filterChainDefinitionMap;
   }
 
@@ -53,7 +49,8 @@ public class ShiroService {
    * 重新加载权限
    */
   public void updatePermission() {
-
+    ShiroFilterFactoryBean shiroFilterFactoryBean = SpringContextHolder
+        .getBean(ShiroFilterFactoryBean.class);
     synchronized (shiroFilterFactoryBean) {
 
       AbstractShiroFilter shiroFilter;
@@ -65,7 +62,7 @@ public class ShiroService {
 
       PathMatchingFilterChainResolver filterChainResolver =
           (PathMatchingFilterChainResolver) shiroFilter
-          .getFilterChainResolver();
+              .getFilterChainResolver();
       DefaultFilterChainManager manager = (DefaultFilterChainManager) filterChainResolver
           .getFilterChainManager();
 
