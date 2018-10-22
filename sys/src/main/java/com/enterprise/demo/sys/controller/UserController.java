@@ -2,7 +2,9 @@ package com.enterprise.demo.sys.controller;
 
 import com.enterprise.demo.sys.common.CoreConst;
 import com.enterprise.demo.sys.common.util.PageUtils;
+import com.enterprise.demo.sys.common.util.PasswordHelper;
 import com.enterprise.demo.sys.common.util.ResultUtils;
+import com.enterprise.demo.sys.dto.ChangePasswordDTO;
 import com.enterprise.demo.sys.dto.base.PageResultDTO;
 import com.enterprise.demo.sys.dto.base.ResponseDTO;
 import com.enterprise.demo.sys.entity.Role;
@@ -24,6 +26,8 @@ import java.util.Map;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,10 +58,10 @@ public class UserController {
           "String", paramType = "query"),
       @ApiImplicitParam(name = "email", value = "email", required = false, dataType = "String",
           paramType =
-          "query"),
+              "query"),
       @ApiImplicitParam(name = "phone", value = "phone", required = false, dataType = "String",
           paramType =
-          "query")})
+              "query")})
   @PostMapping("/list")
   @ResponseBody
   public PageResultDTO loadUsers(User user, Integer limit, Integer offset) {
@@ -177,33 +181,34 @@ public class UserController {
     return ResponseDTO;
   }
 
-//    /**
-//     * 修改密码
-//     */
-//    @PostMapping(value = "/changePassword")
-//    @ResponseBody
-//    public ResponseDTO changePassword(ChangePasswordVo changePasswordVo) {
-//        if (!changePasswordVo.getNewPassword().equals(changePasswordVo.getConfirmNewPassword())) {
-//            return ResultUtils.error("两次密码输入不一致");
-//        }
-//        User loginUser = userService.selectByUserId(((User) SecurityUtils.getSubject()
-// .getPrincipal()).getUserId());
-//        User newUser = CopyUtil.getCopy(loginUser, User.class);
-//        String sysOldPassword = loginUser.getPassword();
-//        newUser.setPassword(changePasswordVo.getOldPassword());
-//        String entryOldPassword = PasswordHelper.getPassword(newUser);
-//        if (sysOldPassword.equals(entryOldPassword)) {
-//            newUser.setPassword(changePasswordVo.getNewPassword());
-//            PasswordHelper.encryptPassword(newUser);
-//            userService.updateUserByPrimaryKey(newUser);
-//            //*清除登录缓存*//
-//            List<String> userIds = new ArrayList<>();
-//            userIds.add(loginUser.getUserId());
-//            shiroRealm.removeCachedAuthenticationInfo(userIds);
-//            /*SecurityUtils.getSubject().logout();*/
-//        } else {
-//            return ResultUtils.error("您输入的旧密码有误");
-//        }
-//        return ResultUtils.success("修改密码成功");
-//    }
+  /**
+   * 修改密码
+   */
+  @PostMapping(value = "/changePassword")
+  @ResponseBody
+  public ResponseDTO changePassword(ChangePasswordDTO changePasswordDTO) {
+    if (!changePasswordDTO.getNewPassword().equals(changePasswordDTO.getConfirmNewPassword())) {
+      return ResultUtils.error("两次密码输入不一致");
+    }
+    User loginUser = userService.selectByUserId(((User) SecurityUtils.getSubject()
+        .getPrincipal()).getUserId());
+    User newUser = new User();
+    BeanUtils.copyProperties(loginUser, newUser);
+    String sysOldPassword = loginUser.getPassword();
+    newUser.setPassword(changePasswordDTO.getOldPassword());
+    String entryOldPassword = PasswordHelper.getPassword(newUser);
+    if (sysOldPassword.equals(entryOldPassword)) {
+      newUser.setPassword(changePasswordDTO.getNewPassword());
+      PasswordHelper.encryptPassword(newUser);
+      userService.updateByUserId(newUser);
+      // 清除登录缓存
+      Set<String> userIds = Sets.newHashSet();
+      userIds.add(loginUser.getUserId());
+      myShiroRealm.removeCachedAuthenticationInfo(userIds);
+      /*SecurityUtils.getSubject().logout();*/
+    } else {
+      return ResultUtils.error("您输入的旧密码有误");
+    }
+    return ResultUtils.success("修改密码成功");
+  }
 }

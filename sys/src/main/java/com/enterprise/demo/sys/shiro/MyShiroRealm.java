@@ -86,6 +86,22 @@ public class MyShiroRealm extends AuthorizingRealm {
   }
 
   /**
+   * 清除认证信息
+   */
+  public void removeCachedAuthenticationInfo(Set<String> userIds) {
+    if (CollectionUtils.isEmpty(userIds)) {
+      return;
+    }
+    List<SimplePrincipalCollection> list = getSpcListByUserIds(userIds);
+    RealmSecurityManager securityManager =
+        (RealmSecurityManager) SecurityUtils.getSecurityManager();
+    MyShiroRealm realm = (MyShiroRealm) securityManager.getRealms().iterator().next();
+    for (SimplePrincipalCollection simplePrincipalCollection : list) {
+      realm.clearCachedAuthenticationInfo(simplePrincipalCollection);
+    }
+  }
+
+  /**
    * 根据userId 清除当前session存在的用户的权限缓存
    */
   public void clearAuthorizationByUserId(Set<String> userIds) {
