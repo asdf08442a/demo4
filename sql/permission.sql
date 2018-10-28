@@ -13,7 +13,7 @@ CREATE TABLE `permission` (
   `type` tinyint unsigned NOT NULL COMMENT '类型 0：目录 1：菜单 2：按钮',
   `order_num` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '排序',
   `icon` varchar(64) NOT NULL DEFAULT '' COMMENT '图标',
-	`status` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '权限状态：0无效，1有效',
+	`is_use` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '权限是否有效：0否，1有',
   `gmt_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
@@ -103,35 +103,6 @@ CREATE TABLE `role_permission` (
 -- Records of role_permission
 -- ----------------------------
 INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '1');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '2');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '201');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20101');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20102');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20103');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20104');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '202');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20201');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20202');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20203');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20204');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20205');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20206');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '203');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20301');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20302');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20303');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '20304');
-INSERT INTO `role_permission` (role_id, permission_id) VALUES ('1', '20305');
-INSERT INTO `role_permission` (role_id, permission_id) VALUES ('1', '20306');
-INSERT INTO `role_permission` (role_id, permission_id) VALUES ('1', '204');
-INSERT INTO `role_permission` (role_id, permission_id) VALUES ('1', '20401');
-INSERT INTO `role_permission` (role_id, permission_id) VALUES ('1', '20402');
-INSERT INTO `role_permission` (role_id, permission_id) VALUES ('1', '20403');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '3');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '301');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '4');
-INSERT INTO `role_permission`(role_id, permission_id) VALUES ('1', '401');
-INSERT INTO `role_permission` (role_id, permission_id) VALUES ('2', '1');
 
 -- ----------------------------
 -- Table structure for `role`
@@ -143,7 +114,7 @@ CREATE TABLE `role` (
   `name` varchar(64) NOT NULL COMMENT '角色名称',
   `description` varchar(255) NOT NULL DEFAULT '' COMMENT '角色描述',
 	`type` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '角色类型：0商户，1用户',
-	`status` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '角色状态：0无效，1有效',
+	`is_use` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '角色是否有效：0否，1有',
 	`is_default` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否默认角色：0否，1是',
   `gmt_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
@@ -154,7 +125,6 @@ CREATE TABLE `role` (
 -- Records of role
 -- ----------------------------
 INSERT INTO `role` (role_id, name, description) VALUES ('1', '超级管理员', '超级管理员');
-INSERT INTO `role` (role_id, name, description) VALUES ('2', '普通用户', '普通用户');
 
 -- ----------------------------
 -- Table structure for `tenant_role`
@@ -208,7 +178,7 @@ CREATE TABLE `user` (
   `phone`           varchar(32)      NOT NULL DEFAULT '' COMMENT '联系方式',
   `sex`             tinyint unsigned NOT NULL COMMENT '性别：1男，2女',
   `age`             tinyint unsigned NOT NULL COMMENT '年龄',
-  `status`          tinyint unsigned NOT NULL DEFAULT 1 COMMENT '用户状态：0无效，1有效',
+  `is_use`          tinyint unsigned NOT NULL DEFAULT 1 COMMENT '用户是否有效：0否，1有',
   `last_login_time` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后登录时间',
   `gmt_create`      timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified`    timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
@@ -218,5 +188,5 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user`(user_id, username, password, salt, email, phone, sex, age, status)
-VALUES ('1', 'admin', '32977780445491bcb6a827c1abd49381', '286ccf9534de3d4f5eca56377f686c4f', '523179414@qq.com', '187888899991', '1', '20', '1');
+INSERT INTO `user`(tenant_id, user_id, username, password, salt, email, phone, sex, age)
+VALUES ('1', '11', 'admin', '32977780445491bcb6a827c1abd49381', '286ccf9534de3d4f5eca56377f686c4f', '523179414@qq.com', '187888899991', '1', '20');

@@ -1,3 +1,5 @@
 include 'portal'
-include 'model1'
 include 'permission'
+include 'model1'
+include 'common'
+

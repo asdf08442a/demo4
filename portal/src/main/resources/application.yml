@@ -17,6 +17,16 @@ spring:
       connection-timeout: 30000
       connection-test-query: SELECT 1
 
+  redis:
+    host: 172.16.107.128
+    port: 6379
+    database: 0
+    password: 123456
+    timeout: 2000
+
+mybatis:
+  mapper-locations: classpath*:mappers/*Mapper.xml
+
 logging:
   config: classpath:log4j2.xml
 
@@ -25,7 +35,7 @@ logging:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://172.16.107.128:3306/model1?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://172.16.107.128:3306/permission?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
 logging:
