@@ -26,8 +26,8 @@ public class ShiroService {
   public Map<String, String> loadFilterChainDefinitions() {
     // 权限控制map.从数据库获取
     Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+    // 设置不控制权限
     filterChainDefinitionMap.put("/login", "anon");
-    filterChainDefinitionMap.put("/logout", "logout");
 
     List<PermissionEntity> permissionList = permissionService.selectAll();
     for (PermissionEntity permission : permissionList) {

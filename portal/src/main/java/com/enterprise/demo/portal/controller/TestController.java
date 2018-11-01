@@ -23,10 +23,22 @@ public class TestController {
   @Autowired
   private PermissionService permissionService;
 
-  @PostMapping("/test")
+  @PostMapping("/permissions")
   public List<PermissionEntity> sayHello(@RequestBody RequestDTO requestDTO) {
     log.info("request:{}", requestDTO);
     return permissionService.selectAll();
+  }
+
+  @PostMapping("/workdest")
+  public String test() {
+    log.info("workdest request");
+    return "success";
+  }
+
+  @PostMapping("/roles")
+  public String roles() {
+    log.info("roles request");
+    return "success";
   }
 
 }

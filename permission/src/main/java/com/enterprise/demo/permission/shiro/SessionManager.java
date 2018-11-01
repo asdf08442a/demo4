@@ -21,7 +21,7 @@ public class SessionManager extends DefaultWebSessionManager {
   @Override
   protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
 
-    String sid = WebUtils.toHttp(request).getHeader("token");
+    String sid = WebUtils.toHttp(request).getHeader("sessionId");
     if (StringUtils.isNotBlank(sid)) {
       // 设置当前session状态
       request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE,

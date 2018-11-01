@@ -1,14 +1,23 @@
 package com.enterprise.demo.permission.shiro;
 
+import com.enterprise.demo.permission.dao.UserEntity;
+import com.enterprise.demo.permission.enums.StatusEnum;
+import com.enterprise.demo.permission.service.PermissionService;
+import com.enterprise.demo.permission.service.RoleService;
+import com.enterprise.demo.permission.service.UserService;
 import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -23,14 +32,15 @@ import org.apache.shiro.util.CollectionUtils;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Slf4j
 public class MyShiroRealm extends AuthorizingRealm {
 
-  //  @Autowired
-//  private UserService userService;
-//  @Autowired
-//  private RoleService roleService;
-//  @Autowired
-//  private PermissionService permissionService;
+  @Autowired
+  private UserService userService;
+  @Autowired
+  private RoleService roleService;
+  @Autowired
+  private PermissionService permissionService;
   @Autowired
   private RedisSessionDAO redisSessionDAO;
 
@@ -40,9 +50,22 @@ public class MyShiroRealm extends AuthorizingRealm {
   @Override
   protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
       throws AuthenticationException {
-
-    SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(token.getPrincipal(),
-        token.getCredentials(), "");
+    String userId = (String) token.getPrincipal();
+    log.info("userid is {}", userId);
+    UserEntity userEntity = userService.selectByUserId(userId);
+    if (userEntity == null) {
+      // 无此用户
+      throw new UnknownAccountException();
+    }
+    if (StatusEnum.UNUSE.equals(userEntity.getIsUse())) {
+      // 帐号锁定
+      throw new LockedAccountException();
+    }
+    SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
+        userEntity,
+        null,
+        null,
+        getName());
     return authenticationInfo;
   }
 
@@ -54,7 +77,7 @@ public class MyShiroRealm extends AuthorizingRealm {
       AuthenticationInfo info) throws AuthenticationException {
     UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
     // 若有token则登陆成功
-    if (token.getPassword().toString() != null) {
+    if (StringUtils.isNotBlank(String.valueOf(token.getPassword()))) {
       return;
     }
     super.assertCredentialsMatch(token, info);
@@ -68,10 +91,11 @@ public class MyShiroRealm extends AuthorizingRealm {
     if (principals == null) {
       throw new AuthorizationException("principals should not be null");
     }
-    String userId = (String) principals.getPrimaryPrincipal();
+    UserEntity userEntity = (UserEntity) principals.getPrimaryPrincipal();
     SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-    info.setRoles(null);
-    info.setStringPermissions(null);
+    Set<String> roles = roleService.selectRoleIdsByUserId(userEntity.getUserId());
+    info.setRoles(roles);
+    info.setStringPermissions(permissionService.selectPermsByRoleIds(roles));
     return info;
   }
 

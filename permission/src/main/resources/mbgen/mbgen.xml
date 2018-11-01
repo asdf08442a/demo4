@@ -76,6 +76,12 @@
     <table schema="permission" tableName="tenant_role" domainObjectName="TenantRole"/>
 
     <table schema="permission" tableName="user_role" domainObjectName="UserRole"/>
+
+    <table schema="permission" tableName="user" domainObjectName="User">
+      <columnOverride column="is_use"
+        javaType="com.enterprise.demo.permission.enums.StatusEnum" jdbcType="TINYINT"
+        typeHandler="com.xiaoju.manhattan.auto.framework.mybatis.CodeEnumTypeHandler"/>
+    </table>
     <!-- end table list -->
 
   </context>

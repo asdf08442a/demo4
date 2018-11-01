@@ -10,11 +10,11 @@ public enum StatusEnum implements ICodeEnum {
   /**
    * 无效
    */
-  UNUSE(0, "目录"),
+  UNUSE(0, "无效"),
   /**
    * 有效
    */
-  USE(1, "菜单");
+  USE(1, "有效");
 
   private byte code;
   private String desc;
