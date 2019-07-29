@@ -3,10 +3,9 @@
   * portal: 请求入口
   * model1: 服务模块1
   * ...
-  * sys: 后台管理
 ##技术选型
-  * Springboot
-  * mybatis mybatisPlus
-  * druid
   * gradle
+  * springboot
+  * mybatis && mybatis generator
+  * hikari
   * 

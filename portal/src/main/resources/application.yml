@@ -18,7 +18,7 @@ spring:
       connection-test-query: SELECT 1
 
   redis:
-    host: 172.16.107.128
+    host: 172.22.27.121
     port: 6379
     database: 0
     password: 123456
@@ -35,7 +35,7 @@ logging:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://172.16.107.128:3306/permission?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://172.22.27.121:3306/permission?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
 logging:
@@ -46,9 +46,9 @@ logging:
 spring:
   profiles: test
   datasource:
-    url:
-    username:
-    password:
+    url: jdbc:mysql://172.22.27.121:3306/permission?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
 logging:
   level.com.enterprise: info
 

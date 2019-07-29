@@ -16,7 +16,6 @@ configurations {
 }
 dependencies {
     compile project(':model1')
-    compile project(':permission')
 
     
 
