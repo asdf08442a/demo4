@@ -28,6 +28,8 @@ allprojects{
     repositories {
         mavenLocal()
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://artifactory.intra.xiaojukeji.com/artifactory/libs-release/' }
+        maven { url 'http://artifactory.intra.xiaojukeji.com/artifactory/libs-snapshot/' }
         mavenCentral()
     }
 
@@ -38,7 +40,6 @@ allprojects{
         }
     }
 
-    // add source dir, for mbgen
     sourceSets {
         main {
             java {
@@ -64,7 +65,7 @@ subprojects {
     }
 
     dependencies {
-
+        
         testCompile("org.springframework.boot:spring-boot-starter-test")
     }
 }

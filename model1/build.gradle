@@ -7,6 +7,7 @@ dependencies {
     compile project(':common')
     mbgen('org.mybatis.generator:mybatis-generator-core:1.3.6')
     mbgen('mysql:mysql-connector-java:6.0.6')
+    mbgen project(':common')
 }
 
 def getDbProperties = {
