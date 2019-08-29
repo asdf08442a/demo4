@@ -4,10 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-/**
- * @author jinzg
- * @date 2018/10/28
- */
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor

@@ -1,8 +1,8 @@
 server:
-  port: 8080
+  port: 6066
+  servlet-path: /demo
+
 spring:
-  application:
-    name: demo
   profiles:
     active: dev
   datasource:
@@ -35,7 +35,7 @@ logging:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://172.22.27.121:3306/permission?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://172.22.27.131:3306/permission?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
 logging:
@@ -46,7 +46,7 @@ logging:
 spring:
   profiles: test
   datasource:
-    url: jdbc:mysql://172.22.27.121:3306/permission?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://172.22.27.131:3306/permission?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
 logging:

@@ -1,9 +1,5 @@
 package com.enterprise.demo.common;
 
-/**
- * @author jinzhengang
- * @date 2018-07-16
- **/
 public class CommonConstant {
 
   public static final Integer SUCCESS_CODE = 200;

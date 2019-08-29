@@ -10,8 +10,8 @@
     <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
     <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
     <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
-    <plugin type="com.enterprise.demo.common.mybatis.MySqlLimitGeneratorPlugin"/>
-    <plugin type="com.enterprise.demo.common.mybatis.DoNameSuffixGeneratorPlugin"/>
+    <plugin type="com.enterprise.demo.core.common.mybatis.MySqlLimitGeneratorPlugin"/>
+    <plugin type="com.enterprise.demo.core.common.mybatis.DoNameSuffixGeneratorPlugin"/>
 
     <commentGenerator>
       <!-- 指定MBG生成的代码中是否包含任何注释 true为清除注释，false为不清除注释，默认为false -->
