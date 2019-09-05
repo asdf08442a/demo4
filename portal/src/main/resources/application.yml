@@ -6,6 +6,7 @@ spring:
   profiles:
     active: dev
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       minimum-idle: 5
@@ -18,7 +19,7 @@ spring:
       connection-test-query: SELECT 1
 
   redis:
-    host: 172.22.27.121
+    host: 172.22.27.136
     port: 6379
     database: 0
     password: 123456
@@ -35,7 +36,7 @@ logging:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://172.22.27.131:3306/permission?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://172.22.27.136:3306/permission?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
 logging:
@@ -46,7 +47,7 @@ logging:
 spring:
   profiles: test
   datasource:
-    url: jdbc:mysql://172.22.27.131:3306/permission?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://172.22.27.136:3306/permission?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
 logging:
