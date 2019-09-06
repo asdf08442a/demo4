@@ -16,7 +16,7 @@ buildscript {
 group 'com.enterprise.demo'
 version '1.0.0-SNAPSHOT'
 
-allprojects{
+allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'maven'
@@ -79,9 +79,13 @@ subprojects {
         compile "com.google.code.gson:gson:2.8.5"
         // guava
         compile group: 'com.google.guava', name: 'guava', version: '28.0-jre'
+        // redis
+        compile "org.springframework.boot:spring-boot-starter-redis"
+        // redisson
+        compile 'org.redisson:redisson:3.11.3'
 
         compile "org.springframework.boot:spring-boot-starter-web"
-
+        
         testCompile group: 'junit', name: 'junit', version: '4.12'
         testCompile("org.springframework.boot:spring-boot-starter-test")
     }
