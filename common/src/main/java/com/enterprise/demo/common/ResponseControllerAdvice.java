@@ -27,20 +27,23 @@ public class ResponseControllerAdvice {
 
   @ExceptionHandler(BizException.class)
   @ResponseBody
-  public BizResponse handleAutoFastFailException(BizException ex,
+  public BizResponse handleAutoFastFailException(BizException e,
       HttpServletRequest request) {
-    return BizResponse.build(ErrorCode.BIZ_ERROR, ex.getMessage());
+    log.error("Exception is:", e);
+    return BizResponse.build(ErrorCode.BIZ_ERROR, e.getMessage());
   }
 
   @ExceptionHandler(Exception.class)
   @ResponseBody
-  public BizResponse handleAutoFastFailException(Exception ex,
+  public BizResponse handleAutoFastFailException(Exception e,
       HttpServletRequest request) {
-    return BizResponse.build(ErrorCode.DEFAULT, ex.getMessage());
+    log.error("Exception is:", e);
+    return BizResponse.build(ErrorCode.DEFAULT, e.getMessage());
   }
 
   @ExceptionHandler({BindException.class, ConstraintViolationException.class})
   public BizResponse validatorExceptionHandler(Exception e) {
+    log.error("Exception is:", e);
     String msg = e instanceof BindException ? msgConverter(((BindException) e).getBindingResult())
         : msgConverter(((ConstraintViolationException) e).getConstraintViolations());
     return BizResponse.build(ErrorCode.INVALID_PARAMETER, msg);
