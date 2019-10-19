@@ -4,6 +4,8 @@ server:
     context-path: /demo
 
 spring:
+  application:
+    name: demo
   profiles:
     active: dev
   datasource:
@@ -20,11 +22,19 @@ spring:
       connection-test-query: SELECT 1
 
   redis:
-    host: 172.22.27.136
+    host: 192.168.0.106
     port: 6379
     database: 0
     password: 123456
     timeout: 2000
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+  cache:
+    type: redis
 
 mybatis:
   mapper-locations: classpath*:mapper/*Mapper.xml
@@ -37,7 +47,7 @@ logging:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://10.179.38.6:3306/demo?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.0.106:3306/demo?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: 123456
 logging:
@@ -48,9 +58,9 @@ logging:
 spring:
   profiles: test
   datasource:
-    url: jdbc:mysql://10.179.38.6:3306/demo?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
-    username: root
-    password: 123456
+    url:
+    username:
+    password:
 logging:
   level.com.enterprise: info
 

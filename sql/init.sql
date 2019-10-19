@@ -5,7 +5,8 @@ CREATE TABLE `user` (
   `user_name`       varchar(64)      NOT NULL DEFAULT '' COMMENT '用户名',
   `address`         varchar(64)      NOT NULL DEFAULT '' COMMENT '住址',
   `cellphone`       varchar(16)      NOT NULL DEFAULT '' COMMENT '手机联系方式',
-  `is_use`          tinyint unsigned NOT NULL DEFAULT 1 COMMENT '用户是否有效：0否，1有',
+  `is_use`          tinyint unsigned NOT NULL DEFAULT 1 COMMENT '用户是否有效：0否，1是',
+  `is_deleted`      tinyint unsigned NOT NULL DEFAULT 1 COMMENT '是否删除：0否，1是',
   `gmt_create`      timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified`    timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)

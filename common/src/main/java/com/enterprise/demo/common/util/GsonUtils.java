@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * gson工具类
+ */
 public class GsonUtils {
 
   private static final Logger log = LoggerFactory.getLogger(GsonUtils.class);

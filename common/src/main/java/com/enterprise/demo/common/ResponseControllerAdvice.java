@@ -14,6 +14,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,20 +34,28 @@ public class ResponseControllerAdvice {
     return BizResponse.build(ErrorCode.BIZ_ERROR, e.getMessage());
   }
 
-  @ExceptionHandler(Exception.class)
+  @ExceptionHandler({BindException.class, ConstraintViolationException.class, MethodArgumentNotValidException.class})
   @ResponseBody
-  public BizResponse handleAutoFastFailException(Exception e,
-      HttpServletRequest request) {
-    log.error("Exception is:", e);
-    return BizResponse.build(ErrorCode.DEFAULT, e.getMessage());
-  }
-
-  @ExceptionHandler({BindException.class, ConstraintViolationException.class})
   public BizResponse validatorExceptionHandler(Exception e) {
     log.error("Exception is:", e);
-    String msg = e instanceof BindException ? msgConverter(((BindException) e).getBindingResult())
-        : msgConverter(((ConstraintViolationException) e).getConstraintViolations());
+    String msg = "";
+    if (e instanceof BindException) {
+      msg = msgConverter(((BindException) e).getBindingResult());
+    }
+    if (e instanceof ConstraintViolationException) {
+      msg = msgConverter(((ConstraintViolationException) e).getConstraintViolations());
+    }
+    if (e instanceof MethodArgumentNotValidException) {
+      msg = msgConverter(((MethodArgumentNotValidException) e).getBindingResult());
+    }
     return BizResponse.build(ErrorCode.INVALID_PARAMETER, msg);
+  }
+
+  @ExceptionHandler(Exception.class)
+  @ResponseBody
+  public BizResponse handleAutoFastFailException(Exception e) {
+    log.error("Exception is:", e);
+    return BizResponse.build(ErrorCode.DEFAULT, e.getMessage());
   }
 
   /**

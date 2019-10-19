@@ -27,6 +27,8 @@
       password="${jdbc_password}"
       userId="${jdbc_username}"/>
 
+    <javaTypeResolver type="com.enterprise.demo.common.mybatis.MyJavaTypeResolverImpl"/>
+
     <!-- models -->
     <javaModelGenerator targetPackage="${package_model}"
       targetProject="${src_gen_java}">
@@ -48,9 +50,7 @@
     </javaClientGenerator>
 
     <!-- start table list -->
-    <table domainObjectName="User" tableName="user">
-      <columnOverride column="is_use" javaType="java.lang.Integer" jdbcType="TINYINT"/>
-    </table>
+    <table domainObjectName="User" tableName="user"/>
     <!-- end table list -->
 
   </context>
