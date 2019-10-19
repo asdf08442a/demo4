@@ -64,11 +64,18 @@ public enum ErrorCode {
   /**
    * 服务器内部错误,默认错误
    */
-  DEFAULT(500, " 服务器内部错误"),
+  DEFAULT(500, "服务器内部错误"),
   /**
    * 业务错误
    */
-  BIZ_ERROR(501, " 业务错误");
+  BIZ_ERROR(501, "业务错误"),
+
+  UPDATE_ERROR(1001, "更新失败"),
+
+  //************************* 业务相关错误码 2000 - 2999 *************************
+  USER_INFO_NOT_FOUND(2000, "没有查到用户信息"),
+
+  SELF_ERROR(9999, "自定义异常信息");
 
   public final int code;
 

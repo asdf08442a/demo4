@@ -4,9 +4,9 @@ import com.enterprise.demo.common.base.BizException;
 import com.enterprise.demo.common.base.BizResponse;
 import com.enterprise.demo.common.base.ErrorCode;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +28,12 @@ public class ResponseControllerAdvice {
 
   @ExceptionHandler(BizException.class)
   @ResponseBody
-  public BizResponse handleAutoFastFailException(BizException e,
-      HttpServletRequest request) {
+  public BizResponse handleAutoFastFailException(BizException e) {
     log.error("Exception is:", e);
-    return BizResponse.build(ErrorCode.BIZ_ERROR, e.getMessage());
+    if (Objects.equals(ErrorCode.SELF_ERROR, e.getErrorCode())) {
+      return BizResponse.build(e.getErrorCode(), e.getLocalizedMessage());
+    }
+    return BizResponse.build(e.getErrorCode().code, e.getErrorCode().message);
   }
 
   @ExceptionHandler({BindException.class, ConstraintViolationException.class, MethodArgumentNotValidException.class})

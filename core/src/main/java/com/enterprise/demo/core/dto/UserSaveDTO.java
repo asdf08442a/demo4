@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class UserSaveDTO {
 
   @NotBlank(message = "userName is blank")
   private String userName;
