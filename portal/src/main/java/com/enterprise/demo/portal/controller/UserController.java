@@ -5,6 +5,7 @@ import com.enterprise.demo.core.dao.entity.UserEntity;
 import com.enterprise.demo.core.dto.UserIdDTO;
 import com.enterprise.demo.core.dto.UserSaveDTO;
 import com.enterprise.demo.core.dto.UserUpdateDTO;
+import com.enterprise.demo.core.service.LoginBizService;
 import com.enterprise.demo.core.service.base.UserService;
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -23,6 +24,8 @@ public class UserController {
 
   @Resource
   private UserService userService;
+  @Resource
+  private LoginBizService loginBizService;
 
   @PostMapping("/save")
   public BizResponse<Boolean> save(@Valid @RequestBody UserSaveDTO userSaveDTO) {
@@ -49,5 +52,11 @@ public class UserController {
   public BizResponse<Boolean> deleteByUserId(@Valid @RequestBody UserIdDTO userIdDTO) {
     log.info("deleteByUserId request:{}", userIdDTO);
     return BizResponse.build(userService.deleteByUserId(userIdDTO.getUserId()));
+  }
+
+  @PostMapping("/login")
+  public BizResponse<Boolean> login(@Valid @RequestBody UserIdDTO userIdDTO) {
+    log.info("login request:{}", userIdDTO);
+    return BizResponse.build(loginBizService.login(userIdDTO.getUserId()));
   }
 }
