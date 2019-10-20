@@ -1,6 +1,7 @@
 package com.enterprise.demo.portal.controller;
 
 import com.enterprise.demo.common.base.BizResponse;
+import com.enterprise.demo.common.util.SnowFlakeUtils;
 import com.enterprise.demo.core.dao.entity.UserEntity;
 import com.enterprise.demo.core.dto.UserIdDTO;
 import com.enterprise.demo.core.dto.UserSaveDTO;
@@ -31,7 +32,7 @@ public class UserController {
   public BizResponse<Boolean> save(@Valid @RequestBody UserSaveDTO userSaveDTO) {
     log.info("save request:{}", userSaveDTO);
     UserEntity userEntity = new UserEntity();
-    userEntity.setUserId("111");
+    userEntity.setUserId(String.valueOf(SnowFlakeUtils.nextId()));
     BeanUtils.copyProperties(userSaveDTO, userEntity);
     return BizResponse.build(userService.save(userEntity));
   }
