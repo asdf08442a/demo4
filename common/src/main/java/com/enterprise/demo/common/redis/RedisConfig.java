@@ -1,4 +1,4 @@
-package com.enterprise.demo.common.config;
+package com.enterprise.demo.common.redis;
 
 import java.time.Duration;
 import org.springframework.cache.CacheManager;

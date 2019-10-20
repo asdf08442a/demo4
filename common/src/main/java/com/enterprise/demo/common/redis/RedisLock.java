@@ -1,4 +1,4 @@
-package com.enterprise.demo.common.redislock;
+package com.enterprise.demo.common.redis;
 
 import java.util.concurrent.TimeUnit;
 import org.redisson.api.RLock;

@@ -1,4 +1,4 @@
-package com.enterprise.demo.common.redislock;
+package com.enterprise.demo.common.redis;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -12,25 +12,19 @@ public class RedisLockManager {
 
   private static String host;
   private static String port;
-  private static String password;
 
-  @Value("${spring.redislock.host}")
+  @Value("${spring.redis.host}")
   public static void setHost(String host) {
     RedisLockManager.host = host;
   }
 
-  @Value("${spring.redislock.port}")
+  @Value("${spring.redis.port}")
   public static void setPort(String port) {
     RedisLockManager.port = port;
   }
 
-  @Value("${spring.redislock.password}")
-  public static void setPassword(String password) {
-    RedisLockManager.password = password;
-  }
-
   static {
-    config.useSingleServer().setAddress(host + ":" + port).setPassword(password);
+    config.useSingleServer().setAddress(host + ":" + port);
     redisson = Redisson.create(config);
   }
 
